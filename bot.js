@@ -28,7 +28,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 
         args = args.splice(1);
 
-        console.log(args)
+        console.log(args);
 
         switch(cmd) {
             // !ping
@@ -48,9 +48,15 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 });
                 break;
             case 'emrata':
-                bot.sendMessage({
-                    to: channelID,
-                    message: 'https://media.giphy.com/media/EFIwNN4wo9Tig/giphy.gif'
+                giphy.random({
+                    tag: 'emily ratajkowski',
+                    rating: 'r',
+                    fmt: 'json'
+                }, function (err, res) {
+                    bot.sendMessage({
+                        to: channelID,
+                        message: res.data.url
+                    })
                 });
                 break;
             }
