@@ -29,34 +29,43 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 
         args = args.splice(1);
 
-        let query = '';
-        args.forEach( (mot, i) => {
-            query += (i == 0) ? mot : '+'+mot;
-        })
-
-        /*
-        if(/.*\s(\d+)/.exec(message.substring(4))[1]){
-            let limit = /.*\s(\d+)/.exec(message.substring(4))[1];
-        } else {
-            let limit = '1';
+        let limit = '1';
+        let regex = new RegExp('.+\\s(\\d+)$')
+        if(regex.exec(message.substring(4)) !== null){
+            limit = regex.exec(message.substring(4))[1]
         }
-        */
 
         switch(cmd) {
-            case 'ping':
+            case 'help':
                 bot.sendMessage({
                     to: channelID,
-                    message: 'Pong!'
-                });
+                    message: "```" +
+                    "[Commands]\n" +
+                    "!help : You'll find out\n" +
+                    "!gif <wtv u want> : This found a random gif\n" +
+                    "!multi <wtv u want> <number> : This find multiple gif\n" +
+                    "!emrata : This is where it all began"+
+                    "```"
+                })
                 break;
             case 'gif':
-                giphy.search({
-                    q: query,
+                giphy.random({
+                    tag: message.substring(4),
                     rating: 'r',
-                    limit: '1'
                 }, function (err, res) {
-                    console.log(query)
-                    //console.log(limit)
+                    bot.sendMessage({
+                        to: channelID,
+                        message: res.data.embed_url
+                    })
+                });
+                break;
+            case 'multi':
+                giphy.search({
+                    q: message.substring(4),
+                    rating: 'r',
+                    limit: limit,
+                }, function (err, res) {
+                    console.log(limit)
                     res.data.forEach((gif) => {
                         bot.sendMessage({
                             to: channelID,
@@ -77,6 +86,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                     })
                 });
                 break;
+            //test
             case 'test':
                 var options = {
                     host: "api.giphy.com",
