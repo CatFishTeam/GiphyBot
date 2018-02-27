@@ -2,6 +2,7 @@ var Discord = require('discord.io');
 var logger = require('winston');
 var auth = require('./auth.json');
 var giphy = require('giphy-api')();
+var http = require('http');
 
 // Configure logger settings
 logger.remove(logger.transports.Console);
@@ -28,8 +29,6 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 
         args = args.splice(1);
 
-        console.log(args)
-
         switch(cmd) {
             // !ping
             case 'ping':
@@ -40,19 +39,45 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 break;
             // Just add any case commands if you want to..
             case 'gif':
-                giphy.search('test', function (err, res) {
-                    bot.sendMessage({
-                        to: channelID,
-                        message: 'http://resize-parismatch.ladmedia.fr/r/,600,forcey/img/var/news/storage/images/paris-match/people/emily-ratajkowski-la-dolce-vita-1288832/em14/21513737-1-fre-FR/EM14.jpg'
+                giphy.search(args[0], function (err, res) {
+                    console.log(res.data[0])
+                    res.data.forEach((gif) => {
+                        bot.sendMessage({
+                            to: channelID,
+                            message: gif.embed_url
+                        })
                     })
                 });
                 break;
             case 'emrata':
-                bot.sendMessage({
-                    to: channelID,
-                    message: 'https://media.giphy.com/media/EFIwNN4wo9Tig/giphy.gif'
+                giphy.random({
+                    tag: 'emily ratajkowski',
+                    rating: 'r',
+                    fmt: 'json'
+                }, function (err, res) {
+                    bot.sendMessage({
+                        to: channelID,
+                        message: res.data.url
+                    })
+                });
+                break;
+            case 'bla':
+                var options = {
+                    host: "api.giphy.com",
+                    path: "/v1/gifs/search?q=ryan+gosling&api_key="+auth.giphy+"&limit=5",
+                    port: 80,
+                };
+
+                var req = http.get(options, function (res) {
+                    res.on('data', function (chunk) {
+                        bot.sendMessage({
+                        to: channelID,
+                        message: chunk
+                        })
+                    });
                 });
                 break;
             }
+
     }
 });
