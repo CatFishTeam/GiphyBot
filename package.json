@@ -1,0 +1,13 @@
+{
+  "name": "botgiphy",
+  "version": "1.0.0",
+  "description": "A beautifull discord bot for giphy",
+  "main": "bot.js",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.io": "github:woor/discord.io#gateway_v6",
+    "giphy-api": "^1.2.7",
+    "winston": "^2.4.0"
+  }
+}
