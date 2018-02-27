@@ -29,18 +29,34 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 
         args = args.splice(1);
 
+        let query = '';
+        args.forEach( (mot, i) => {
+            query += (i == 0) ? mot : '+'+mot;
+        })
+
+        /*
+        if(/.*\s(\d+)/.exec(message.substring(4))[1]){
+            let limit = /.*\s(\d+)/.exec(message.substring(4))[1];
+        } else {
+            let limit = '1';
+        }
+        */
+
         switch(cmd) {
-            // !ping
             case 'ping':
                 bot.sendMessage({
                     to: channelID,
                     message: 'Pong!'
                 });
                 break;
-            // Just add any case commands if you want to..
             case 'gif':
-                giphy.search(args[0], function (err, res) {
-                    console.log(res.data[0])
+                giphy.search({
+                    q: query,
+                    rating: 'r',
+                    limit: '1'
+                }, function (err, res) {
+                    console.log(query)
+                    //console.log(limit)
                     res.data.forEach((gif) => {
                         bot.sendMessage({
                             to: channelID,
@@ -61,7 +77,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                     })
                 });
                 break;
-            case 'bla':
+            case 'test':
                 var options = {
                     host: "api.giphy.com",
                     path: "/v1/gifs/search?q=ryan+gosling&api_key="+auth.giphy+"&limit=5",
