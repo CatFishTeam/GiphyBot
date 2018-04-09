@@ -7,6 +7,7 @@
   "license": "ISC",
   "dependencies": {
     "discord.io": "github:woor/discord.io#gateway_v6",
+    "gfycat-sdk": "^1.4.10",
     "giphy-api": "^1.2.7",
     "winston": "^2.4.0"
   }
