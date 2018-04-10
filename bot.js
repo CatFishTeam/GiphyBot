@@ -87,6 +87,19 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 });
                 break;
             //test
+            case 'alexisren':
+                giphy.random({
+                    tag: 'alexis ren',
+                    rating: 'r',
+                    fmt: 'json'
+                }, function (err, res) {
+                    bot.sendMessage({
+                        to: channelID,
+                        message: res.data.url
+                    })
+                });
+                break;
+            //test
             case 'test':
                 var options = {
                     host: "api.giphy.com",
